@@ -2,6 +2,8 @@ node_modules/
 .idea/
 .netbeans.xml
 
+log.txt
+
 
 # production
 /build
