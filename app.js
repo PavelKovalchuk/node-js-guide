@@ -10,7 +10,8 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded());
 
 // imported routes
-app.use(adminRoutes);
+// /admin - filter
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 //404
 app.use((req, res, next) => {
