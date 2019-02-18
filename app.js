@@ -2,36 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 // 3-party package for encoding data in the body
 // Middleware pattern
 app.use(bodyParser.urlencoded());
 
-app.use('/add-product', (req, res, next) => {
-  console.log('In add-product middleware');
-  res.send('' +
-    '<div>' +
-    '<h1>add product</h1>' +
-    '<form action="product" method="post">' +
-    '<input type="text" name="title" />' +
-    '<button type="submit">Add prodcut</button>' +
-    '</form>'+
-    '</div>'
-  );
-});
-
-// FIlter only GET-request / POST-request
-app.post('/product', (req, res, next) => {
-  console.log('product req.body: ', req.body);
-  res.redirect('/');
-});
-
-// function "use" for every upcoming request
-app.use('/', (req, res, next) => {
-  console.log('In another middleware');
-  console.log('---------------------');
-
-  res.send('<h1>Hello</h1>');
+// imported routes
+app.use(adminRoutes);
+app.use(shopRoutes);
+//404
+app.use((req, res, next) => {
+  res
+    .status(404)
+    .send('<h1>Sorry, page not found</h1>');
 });
 
 app.listen(3000);
