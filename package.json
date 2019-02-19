@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "prettify:js": "prettier --write \"routes/**/*.js\"",
-    "prettify:html": "prettier --write \"views/**/*.html\""
+    "prettify:html": "prettier --write \"views/**/*.html\"",
+    "prettify:css": "prettier --write \"public/css/**/*.css\""
   },
   "author": "Pavel Kovalchuk",
   "license": "ISC",

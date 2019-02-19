@@ -10,6 +10,9 @@ const shopRoutes = require('./routes/shop');
 // Middleware pattern
 app.use(bodyParser.urlencoded());
 
+// static data (assets) - manages getting files (with .css, .js etc)
+app.use(express.static(path.join(__dirname, 'public')));
+
 // imported routes
 // /admin - filter
 app.use('/admin', adminRoutes);
@@ -18,7 +21,7 @@ app.use(shopRoutes);
 app.use((req, res, next) => {
   res
     .status(404)
-    .res.sendFile(path.join(__dirname, 'views' , 'add-product.html'));
+    .sendFile(path.join(__dirname, 'views' , '404.html'));
 });
 
 app.listen(3000);
