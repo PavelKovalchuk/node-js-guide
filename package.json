@@ -10,7 +10,8 @@
   "author": "Pavel Kovalchuk",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

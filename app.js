@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -17,7 +18,7 @@ app.use(shopRoutes);
 app.use((req, res, next) => {
   res
     .status(404)
-    .send('<h1>Sorry, page not found</h1>');
+    .res.sendFile(path.join(__dirname, 'views' , 'add-product.html'));
 });
 
 app.listen(3000);
