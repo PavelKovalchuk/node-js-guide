@@ -3,7 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
-const adminRoutes = require('./routes/admin');
+const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 // 3-party package for encoding data in the body
@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // imported routes
 // /admin - filter
-app.use('/admin', adminRoutes);
+app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 //404
 app.use((req, res, next) => {
