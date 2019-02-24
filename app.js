@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const expressHbs = require('express-handlebars');
 
 const app = express();
 
@@ -12,7 +13,14 @@ const app = express();
  * "views" -> A directory or an array of directories for the application's views.
  *      If an array, the views are looked up in the order they occur in the array.
  */
-app.set('view engine', 'pug');
+// Register new engine templating if it is not built in nodeJs
+app.engine('hbs', expressHbs({
+  layoutsDir: "views/layouts",
+  defaultLayout: "main-layout",
+  extname: "hbs",
+}));
+
+app.set('view engine', 'hbs');
 app.set('views', 'views');
 
 const adminData = require('./routes/admin');
