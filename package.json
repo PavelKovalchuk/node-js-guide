@@ -8,6 +8,7 @@
     "start": "nodemon app.js",
     "prettify:js": "prettier --write \"routes/**/*.js\"",
     "prettify:html": "prettier --write \"views/**/*.html\"",
+    "prettify:pug": "prettier --write \"views/**/*.pug\"",
     "prettify:css": "prettier --write \"public/css/**/*.css\""
   },
   "author": "Pavel Kovalchuk",
@@ -18,6 +19,9 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.1",
+    "pug": "^2.0.3"
   }
 }

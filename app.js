@@ -3,6 +3,18 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
+
+/**
+ * Assigns setting name to value. Sharing data.
+ * You may store any value that you want, but certain names can be used to configure the behavior of the server
+ *
+ * "view engine" -> The default engine extension to use when omitted.
+ * "views" -> A directory or an array of directories for the application's views.
+ *      If an array, the views are looked up in the order they occur in the array.
+ */
+app.set('view engine', 'pug');
+app.set('views', 'views');
+
 const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
