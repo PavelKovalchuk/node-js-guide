@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
   // res.sendFile(path.join(rootDir, "views", "shop.html"));
 
   // This is for dynamic templates. Path and file extension is defined in the app.js
-  res.render('shop', {prods: products, docTitle: "Shop"});
+  res.render('shop', {prods: products, pageTitle: "Shop", path: "/"});
 });
 
 module.exports = router;
