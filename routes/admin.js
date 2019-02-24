@@ -8,8 +8,8 @@ const products = [];
 // PATH /admin/add-product => GET
 router.get("/add-product", (req, res, next) => {
   console.log("In add-product middleware");
-  console.log("rootDir", rootDir);
-  res.sendFile(path.join(rootDir, "views", "add-product.html"));
+  // res.sendFile(path.join(rootDir, "views", "add-product.html"));
+  res.render('add-product', {pageTitle: "Add product"});
 });
 
 // FIlter only GET-request / POST-request
