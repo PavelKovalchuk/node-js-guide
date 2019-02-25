@@ -14,13 +14,13 @@ const app = express();
  *      If an array, the views are looked up in the order they occur in the array.
  */
 // Register new engine templating if it is not built in nodeJs
-app.engine('hbs', expressHbs({
+/*app.engine('hbs', expressHbs({
   layoutsDir: "views/layouts",
   defaultLayout: "main-layout",
   extname: "hbs",
-}));
+}));*/
 
-app.set('view engine', 'hbs');
+app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminData = require('./routes/admin');
