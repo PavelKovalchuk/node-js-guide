@@ -1,4 +1,5 @@
-const products = [];
+const Product = require("../models/product");
+
 
 exports.getAddProduct = (req, res, next) => {
   console.log("In add-product middleware");
@@ -16,7 +17,9 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-  products.push({title: req.body.title});
+  const product = new Product(req.body.title);
+  product.save();
+  // products.push({title: req.body.title});
   console.log("product req.body: ", req.body);
   res.redirect("/");
 };
@@ -27,18 +30,20 @@ exports.getProducts = (req, res, next) => {
   // This is for static html
   // res.sendFile(path.join(rootDir, "views", "shop.html"));
 
-  // This is for dynamic templates. Path and file extension is defined in the app.js
-  res.render(
-    'shop',
-    {
-      prods: products,
-      pageTitle: "Shop",
-      path: "/",
-      hasProducts:  products.length > 0,
-      activeShop: true,
-      productCss: true,
-      // special key for handlebars
-      // layout: true,
-    }
-  );
+  const products = Product.fetchAll((products) => {
+    // This is for dynamic templates. Path and file extension is defined in the app.js
+    res.render(
+      'shop',
+      {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/",
+        hasProducts:  products.length > 0,
+        activeShop: true,
+        productCss: true,
+        // special key for handlebars
+        // layout: true,
+      }
+    );
+  });
 };
