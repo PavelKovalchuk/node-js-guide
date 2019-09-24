@@ -1,8 +1,7 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-// const expressHbs = require('express-handlebars');
-const errorController = require('./controllers/error');
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const errorController = require("./controllers/error");
 
 const app = express();
 
@@ -12,32 +11,26 @@ const app = express();
  *
  * "view engine" -> The default engine extension to use when omitted.
  * "views" -> A directory or an array of directories for the application's views.
- *      If an array, the views are looked up in the order they occur in the array.
+ *  If an array, the views are looked up in the order they occur in the array.
  */
-// Register new engine templating if it is not built in nodeJs
-/*app.engine('hbs', expressHbs({
-  layoutsDir: "views/layouts",
-  defaultLayout: "main-layout",
-  extname: "hbs",
-}));*/
 
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set("view engine", "ejs");
+app.set("views", "views");
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
 
 // 3-party package for encoding data in the body
 // Middleware pattern
 app.use(bodyParser.urlencoded());
 
 // static data (assets) - manages getting files (with .css, .js etc)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // imported routes
-// /admin - filter
-app.use('/admin', adminRoutes);
+app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+
 //404
 app.use(errorController.get404);
 

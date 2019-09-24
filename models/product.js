@@ -1,11 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json');
+const p = path.join(path.dirname(process.mainModule.filename), "data", "products.json");
 
 const getProductsFromFile = (callBack) => {
   fs.readFile(p, (error, fileContent) => {
-    let products = [];
     if (error) {
       callBack([]);
     } else {
@@ -23,7 +22,7 @@ module.exports = class Product {
     getProductsFromFile((products) => {
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), (error) => {
-        console.log('save method - writeFile error: ', error);
+        console.log("save method - writeFile error: ", error);
       });
     });
   }
@@ -31,5 +30,4 @@ module.exports = class Product {
   static fetchAll(callBack) {
     getProductsFromFile(callBack);
   }
-
 };
