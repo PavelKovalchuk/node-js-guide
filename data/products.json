@@ -1,7 +1,8 @@
 [
-  {"title": "book"},
-  {"title": "another title"},
-  {"title": "dfgfdgd"},
-  {"title": "dsfsdfsdsdg sdfsd fsdf"},
-  {"title": "kokoko"}
+  {
+    "title": "A book",
+    "imageUrl": "https://timedotcom.files.wordpress.com/2015/06/521811839-copy.jpg",
+    "description": "Reading: 5 Powerful Books to Improve Your Life",
+    "price": "18.55"
+  }
 ]
