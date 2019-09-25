@@ -14,7 +14,8 @@ const getProductsFromFile = (callBack) => {
 };
 
 module.exports = class Product {
-  constructor(title, imageUrl, description, price) {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
     this.description = description;
@@ -22,14 +23,29 @@ module.exports = class Product {
   }
 
   save() {
-    // temporary solution for id
-    this.id = Math.random().toString();
-
     getProductsFromFile((products) => {
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), (error) => {
-        console.log("save method - writeFile error: ", error);
-      });
+      // Update product
+      if (this.id) {
+        const existingProductIndex = products.findIndex((product) => product.id === this.id);
+        const updatedProducts = [...products];
+        updatedProducts[existingProductIndex] = this;
+        fs.writeFile(p, JSON.stringify(updatedProducts), (error) => {
+          if (error) {
+            console.log("save method - writeFile error: ", error);
+          }
+        });
+      } else {
+        // temporary solution for id
+        this.id = Math.random().toString();
+
+        // Create new one product
+        products.push(this);
+        fs.writeFile(p, JSON.stringify(products), (error) => {
+          if (error) {
+            console.log("save method - writeFile error: ", error);
+          }
+        });
+      }
     });
   }
 
