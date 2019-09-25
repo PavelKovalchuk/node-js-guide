@@ -16,6 +16,9 @@ exports.getProduct = (req, res, next) => {
   console.log("In getProduct middleware");
 
   const productId = req.params.productId;
+  Product.findById(productId, (product) => {
+    console.log("product", product);
+  });
 
   res.redirect("/");
 };

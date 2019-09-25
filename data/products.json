@@ -5,5 +5,12 @@
     "imageUrl": "https://timedotcom.files.wordpress.com/2015/06/521811839-copy.jpg",
     "description": "Reading: 5 Powerful Books to Improve Your Life",
     "price": "18.55"
+  },
+  {
+    "title": "Another product",
+    "imageUrl": "https://thumbs-prod.si-cdn.com/ufPRE9RHUDHqQdOsLvYHhJAxy1k=/fit-in/1600x0/https://public-media.si-cdn.com/filer/91/91/91910c23-cae4-46f8-b7c9-e2b22b8c1710/lostbook.jpg",
+    "description": "Book of Lost Books Discovered in Danish Archive ",
+    "price": "20.15",
+    "id": "0.003684130121705431"
   }
 ]
