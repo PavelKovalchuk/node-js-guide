@@ -40,12 +40,22 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   console.log("In getCart middleware");
-  Product.fetchAll((products) => {
-    // Path and file extension is defined in the app.js
-    res.render("shop/cart", {
-      prods: products,
-      pageTitle: "Cart",
-      path: "/cart",
+
+  Cart.getCart((cart) => {
+    Product.fetchAll((products) => {
+      const cartProducts = [];
+      for (product of products) {
+        const cartProductData = cart.products.find((cartProduct) => cartProduct.id === product.id);
+        if (cartProductData) {
+          cartProducts.push({productData: product, qty: cartProductData.qty});
+        }
+      }
+
+      res.render("shop/cart", {
+        pageTitle: "Cart",
+        path: "/cart",
+        products: cartProducts,
+      });
     });
   });
 };
