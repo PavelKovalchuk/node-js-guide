@@ -2,7 +2,7 @@ const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
   console.log("In add-product middleware");
-  res.render("add-product", {
+  res.render("admin/add-product", {
     pageTitle: "Add product",
     path: "/admin/add-product",
     activeAddProduct: true,
@@ -22,7 +22,7 @@ exports.getProducts = (req, res, next) => {
   console.log("In SHOP middleware");
   Product.fetchAll((products) => {
     // Path and file extension is defined in the app.js
-    res.render("shop", {
+    res.render("shop/product-list", {
       prods: products,
       pageTitle: "Shop",
       path: "/",
