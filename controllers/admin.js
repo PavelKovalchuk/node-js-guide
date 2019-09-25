@@ -57,6 +57,13 @@ exports.postEditProduct = (req, res, next) => {
   res.redirect("/admin/products");
 };
 
+exports.postDeleteProduct = (req, res, next) => {
+  console.log("In admin postDeleteProduct middleware");
+  const productId = req.body.productId;
+  Product.deleteById(productId);
+  res.redirect("/admin/products");
+};
+
 exports.getProducts = (req, res, next) => {
   console.log("In admin getProducts middleware");
 
