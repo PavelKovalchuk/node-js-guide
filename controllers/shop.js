@@ -1,7 +1,7 @@
 const Product = require("../models/product");
 
 exports.getProducts = (req, res, next) => {
-  console.log("In SHOP middleware");
+  console.log("In getProducts middleware");
   Product.fetchAll((products) => {
     // Path and file extension is defined in the app.js
     res.render("shop/product-list", {
@@ -10,6 +10,14 @@ exports.getProducts = (req, res, next) => {
       path: "/products",
     });
   });
+};
+
+exports.getProduct = (req, res, next) => {
+  console.log("In getProduct middleware");
+
+  const productId = req.params.productId;
+
+  res.redirect("/");
 };
 
 exports.getIndex = (req, res, next) => {
