@@ -19,16 +19,13 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  console.log("In SHOP middleware");
+  console.log("In admin getProducts middleware");
   Product.fetchAll((products) => {
     // Path and file extension is defined in the app.js
-    res.render("shop/product-list", {
+    res.render("admin/products", {
       prods: products,
-      pageTitle: "Shop",
-      path: "/",
-      hasProducts: products.length > 0,
-      activeShop: true,
-      productCss: true,
+      pageTitle: "Admin products",
+      path: "/admin/products",
     });
   });
 };
