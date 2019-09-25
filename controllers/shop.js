@@ -36,6 +36,18 @@ exports.getCart = (req, res, next) => {
   });
 };
 
+exports.getOrders = (req, res, next) => {
+  console.log("In getOrders middleware");
+  Product.fetchAll((products) => {
+    // Path and file extension is defined in the app.js
+    res.render("shop/orders", {
+      prods: products,
+      pageTitle: "Orders",
+      path: "/orders",
+    });
+  });
+};
+
 exports.getCheckout = (req, res, next) => {
   console.log("In getCheckout middleware");
   Product.fetchAll((products) => {
