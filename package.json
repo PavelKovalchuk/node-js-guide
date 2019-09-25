@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "prettify:js": "prettier --write \"routes/**/*.js\"",
+    "prettify:ejs": "prettier --write \"views/**/*.ejs\"",
     "prettify:html": "prettier --write \"views/**/*.html\"",
     "prettify:pug": "prettier --write \"views/**/*.pug\"",
     "prettify:css": "prettier --write \"public/css/**/*.css\""
