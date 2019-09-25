@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
   console.log("In getProducts middleware");
@@ -54,7 +55,9 @@ exports.postCart = (req, res, next) => {
 
   const productId = req.body.productId;
   console.log("productId", productId);
-
+  Product.findById(productId, (product) => {
+    Cart.addProduct(productId, product.price);
+  });
   res.redirect("/cart");
 };
 
