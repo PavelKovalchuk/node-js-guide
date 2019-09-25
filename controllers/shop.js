@@ -49,6 +49,15 @@ exports.getCart = (req, res, next) => {
   });
 };
 
+exports.postCart = (req, res, next) => {
+  console.log("In postCart middleware");
+
+  const productId = req.body.productId;
+  console.log("productId", productId);
+
+  res.redirect("/cart");
+};
+
 exports.getOrders = (req, res, next) => {
   console.log("In getOrders middleware");
   Product.fetchAll((products) => {
