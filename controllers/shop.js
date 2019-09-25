@@ -44,6 +44,7 @@ exports.getCart = (req, res, next) => {
   Cart.getCart((cart) => {
     Product.fetchAll((products) => {
       const cartProducts = [];
+
       for (product of products) {
         const cartProductData = cart.products.find((cartProduct) => cartProduct.id === product.id);
         if (cartProductData) {
@@ -64,11 +65,20 @@ exports.postCart = (req, res, next) => {
   console.log("In postCart middleware");
 
   const productId = req.body.productId;
-  console.log("productId", productId);
   Product.findById(productId, (product) => {
     Cart.addProduct(productId, product.price);
   });
   res.redirect("/cart");
+};
+
+exports.postCartDeleteProduct = (req, res, next) => {
+  console.log("In postCartDeleteProduct middleware");
+
+  const productId = req.body.productId;
+  Product.findById(productId, (product) => {
+    Cart.deleteProduct(productId, product.price);
+    res.redirect("/cart");
+  });
 };
 
 exports.getOrders = (req, res, next) => {
