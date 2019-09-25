@@ -2,12 +2,10 @@ const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
   console.log("In add-product middleware");
-  res.render("admin/add-product", {
+  res.render("admin/edit-product", {
     pageTitle: "Add product",
     path: "/admin/add-product",
-    activeAddProduct: true,
-    productCss: true,
-    formCss: true,
+    editing: false,
   });
 };
 
@@ -19,8 +17,34 @@ exports.postAddProduct = (req, res, next) => {
 
   const product = new Product(title, imageUrl, description, price);
   product.save();
-  console.log("product req.body: ", req.body);
+
   res.redirect("/");
+};
+
+exports.getEditProduct = (req, res, next) => {
+  console.log("In getEditProduct middleware");
+
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect("/");
+  }
+
+  const productId = req.params.productId;
+  Product.findById(productId, (product) => {
+    if (!product) {
+      return res.redirect("/");
+    }
+    res.render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product: product,
+    });
+  });
+};
+
+exports.postEditProduct = (req, res, next) => {
+  console.log("In admin postEditProduct middleware");
 };
 
 exports.getProducts = (req, res, next) => {
