@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
+const sequelize = require("./util/database");
 
 const app = express();
 
@@ -34,4 +35,10 @@ app.use(shopRoutes);
 //404
 app.use(errorController.get404);
 
-app.listen(3000);
+// Sync models to database (create tables and relations);
+sequelize
+  .sync()
+  .then((result) => {
+    app.listen(3000);
+  })
+  .catch((err) => console.error("sequelize.sync err", err));
