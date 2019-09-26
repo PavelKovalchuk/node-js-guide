@@ -45,9 +45,11 @@ exports.getEditProduct = (req, res, next) => {
   }
 
   const productId = req.params.productId;
-
-  Product.findByPk(productId)
-    .then((product) => {
+  res.user
+    .getProducts({where: {id: productId}})
+    // Product.findByPk(productId)
+    .then((products) => {
+      const product = products[0];
       if (!product) {
         return res.redirect("/");
       }
@@ -103,7 +105,9 @@ exports.postDeleteProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   console.log("In admin getProducts middleware");
 
-  Product.findAll()
+  res.user
+    .getProducts()
+    // Product.findAll()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
