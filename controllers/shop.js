@@ -3,10 +3,11 @@ const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
   console.log("In getProducts middleware");
-  Product.fetchAll()
-    .then(([rows]) => {
+
+  Product.findAll()
+    .then((products) => {
       res.render("shop/product-list", {
-        prods: rows,
+        prods: products,
         pageTitle: "All products",
         path: "/products",
       });
@@ -18,10 +19,12 @@ exports.getProduct = (req, res, next) => {
   console.log("In getProduct middleware");
 
   const productId = req.params.productId;
-  Product.findById(productId)
-    .then(([productArr]) => {
+  Product
+    // .findByPk(productId)
+    .findAll({where: {id: productId}})
+    .then((products) => {
       res.render("shop/product-detail", {
-        product: productArr[0],
+        product: products[0],
         pageTitle: `Product Detail of ${productId}`,
         path: "/products",
       });
@@ -31,10 +34,10 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
   console.log("In getIndex middleware");
-  Product.fetchAll()
-    .then(([rows, metaData]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/index", {
-        prods: rows,
+        prods: products,
         pageTitle: "Shop",
         path: "/",
       });
