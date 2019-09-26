@@ -102,10 +102,20 @@ exports.postCartDeleteProduct = (req, res, next) => {
   console.log("In postCartDeleteProduct middleware");
 
   const productId = req.body.productId;
-  Product.findById(productId, (product) => {
-    Cart.deleteProduct(productId, product.price);
-    res.redirect("/cart");
-  });
+
+  res.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts({where: {id: productId}});
+    })
+    .then((products) => {
+      const product = products[0];
+      product.cartItem.destroy();
+    })
+    .then((result) => {
+      res.redirect("/cart");
+    })
+    .catch((err) => console.error("postCartDeleteProduct err", err));
 };
 
 exports.getOrders = (req, res, next) => {
