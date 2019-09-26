@@ -1,5 +1,4 @@
 const Product = require("../models/product");
-const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
   console.log("In getProducts middleware");
@@ -118,26 +117,47 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch((err) => console.error("postCartDeleteProduct err", err));
 };
 
+exports.postOrders = (req, res, next) => {
+  console.log("In postOrders middleware");
+
+  res.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return res.user
+        .createOrder()
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = {quantity: product.cartItem.quantity};
+              return product;
+            })
+          );
+        })
+        .catch((err) => console.error("postOrders err", err));
+    })
+    .then((result) => {
+      res.redirect("/orders");
+    })
+    .catch((err) => console.error("postOrders err", err));
+};
+
 exports.getOrders = (req, res, next) => {
   console.log("In getOrders middleware");
-  Product.fetchAll((products) => {
-    // Path and file extension is defined in the app.js
-    res.render("shop/orders", {
-      prods: products,
-      pageTitle: "Orders",
-      path: "/orders",
-    });
+  res.render("shop/orders", {
+    prods: [],
+    pageTitle: "Orders",
+    path: "/orders",
   });
 };
 
 exports.getCheckout = (req, res, next) => {
   console.log("In getCheckout middleware");
-  Product.fetchAll((products) => {
-    // Path and file extension is defined in the app.js
-    res.render("shop/checkout", {
-      prods: products,
-      pageTitle: "Checkout",
-      path: "/checkout",
-    });
+  res.render("shop/checkout", {
+    prods: [],
+    pageTitle: "Checkout",
+    path: "/checkout",
   });
 };

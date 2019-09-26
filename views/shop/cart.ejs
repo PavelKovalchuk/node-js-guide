@@ -3,26 +3,33 @@
 </head>
 
 <body>
-    <%- include('../includes/navigation.ejs') %>
+  <%- include('../includes/navigation.ejs') %>
 
-    <main>
-        <% if(products.length > 0) { %>
-        <h1>Cart Products</h1>
-        <p>List of all the products in the cart</p>
-        <ul class="cart__item-list">
-          <% products.forEach((product) => { %>
-            <li class="cart__item">
-              <h1><%= product.title %></h1>
-              <h2>Quantity: <%= product.cartItem.quantity %></h2>
-              <form action="/cart-delete-item" method="POST">
-                <input type="hidden" name="productId" value="<%= product.id %>" />
-                <button type="submit" class="btn">Delete</button>
-              </form>              
-            </li>
-          <% }) %>
-        </ul>
-        <% } else { %>
-        <h1>No products in Cart</h1>
-        <% } %>
-    </main>
-    <%- include('../includes/end.ejs') %>
+  <main>
+    <% if(products.length > 0) { %>
+    <h1>Cart Products</h1>
+    <p>List of all the products in the cart</p>
+    <ul class="cart__item-list">
+      <% products.forEach((product) => { %>
+      <li class="cart__item">
+        <h1><%= product.title %></h1>
+        <h2>Quantity: <%= product.cartItem.quantity %></h2>
+        <form action="/cart-delete-item" method="POST">
+          <input type="hidden" name="productId" value="<%= product.id %>" />
+          <button type="submit" class="btn">Delete</button>
+        </form>
+      </li>
+      <% }) %>
+    </ul>
+    <hr />
+    <div class="centered">
+      <form action="/create-order" method="POST">
+        <button type="submit" class="btn">Checkout</button>
+      </form>
+    </div>
+
+    <% } else { %>
+    <h1>No products in Cart</h1>
+    <% } %>
+  </main>
+  <%- include('../includes/end.ejs') %>
