@@ -3,39 +3,43 @@ const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
   console.log("In getProducts middleware");
-  Product.fetchAll((products) => {
-    // Path and file extension is defined in the app.js
-    res.render("shop/product-list", {
-      prods: products,
-      pageTitle: "All products",
-      path: "/products",
-    });
-  });
+  Product.fetchAll()
+    .then(([rows]) => {
+      res.render("shop/product-list", {
+        prods: rows,
+        pageTitle: "All products",
+        path: "/products",
+      });
+    })
+    .catch((err) => console.error("getProducts err", err));
 };
 
 exports.getProduct = (req, res, next) => {
   console.log("In getProduct middleware");
 
   const productId = req.params.productId;
-  Product.findById(productId, (product) => {
-    res.render("shop/product-detail", {
-      product: product,
-      pageTitle: `Product Detail of ${productId}`,
-      path: "/products",
-    });
-  });
+  Product.findById(productId)
+    .then(([productArr]) => {
+      res.render("shop/product-detail", {
+        product: productArr[0],
+        pageTitle: `Product Detail of ${productId}`,
+        path: "/products",
+      });
+    })
+    .catch((err) => console.error("getProduct err", err));
 };
 
 exports.getIndex = (req, res, next) => {
   console.log("In getIndex middleware");
-  Product.fetchAll((products) => {
-    // Path and file extension is defined in the app.js
-    res.render("shop/index", {
-      prods: products,
-      pageTitle: "Shop",
-      path: "/",
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, metaData]) => {
+      res.render("shop/index", {
+        prods: rows,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => console.error("getIndex err", err));
 };
 
 exports.getCart = (req, res, next) => {

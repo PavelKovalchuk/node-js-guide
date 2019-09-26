@@ -1,18 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const db = require("../util/database");
 const Cart = require("../models/cart");
-
-const p = path.join(path.dirname(process.mainModule.filename), "data", "products.json");
-
-const getProductsFromFile = (callBack) => {
-  fs.readFile(p, (error, fileContent) => {
-    if (error) {
-      callBack([]);
-    } else {
-      callBack(JSON.parse(fileContent));
-    }
-  });
-};
 
 module.exports = class Product {
   constructor(id, title, imageUrl, description, price) {
@@ -24,58 +11,21 @@ module.exports = class Product {
   }
 
   save() {
-    getProductsFromFile((products) => {
-      // Update product
-      if (this.id) {
-        const existingProductIndex = products.findIndex((product) => product.id === this.id);
-        const updatedProducts = [...products];
-        updatedProducts[existingProductIndex] = this;
-        fs.writeFile(p, JSON.stringify(updatedProducts), (error) => {
-          if (error) {
-            console.log("save method - writeFile error: ", error);
-          }
-        });
-      } else {
-        // temporary solution for id
-        this.id = Math.random().toString();
-
-        // Create new one product
-        products.push(this);
-        fs.writeFile(p, JSON.stringify(products), (error) => {
-          if (error) {
-            console.log("save method - writeFile error: ", error);
-          }
-        });
-      }
-    });
+    return db.execute("INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)", [
+      this.title,
+      this.price,
+      this.imageUrl,
+      this.description,
+    ]);
   }
 
-  static deleteById(id) {
-    getProductsFromFile((products) => {
-      const product = products.find((product) => product.id === id);
-      const updatedProducts = products.filter((product) => {
-        return id !== product.id;
-      });
-      fs.writeFile(p, JSON.stringify(updatedProducts), (error) => {
-        if (error) {
-          console.log("deleteById method - writeFile error: ", error);
-        } else {
-          Cart.deleteProduct(id, product.price);
-        }
-      });
-    });
+  static deleteById(id) {}
+
+  static fetchAll() {
+    return db.execute("SELECT * FROM products");
   }
 
-  static fetchAll(callBack) {
-    getProductsFromFile(callBack);
-  }
-
-  static findById(id, callback) {
-    getProductsFromFile((products) => {
-      const product = products.find((product) => {
-        return id === product.id;
-      });
-      callback(product);
-    });
+  static findById(id) {
+    return db.execute("SELECT * FROM products WHERE products.id = ?", [id]);
   }
 };
