@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
 const sequelize = require("./util/database");
 
+const Product = require("./models/product");
+const User = require("./models/user");
 const app = express();
 
 /**
@@ -28,6 +30,16 @@ app.use(bodyParser.urlencoded());
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Add new field (sequelize object) to request object
+app.use((res, req, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.error("app.use err", err));
+});
+
 // imported routes
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -36,9 +48,24 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 // Sync models to database (create tables and relations);
+
+// Relations
+Product.belongsTo(User, {constraints: true, onDelete: "CASCADE"});
+User.hasMany(Product);
+
 sequelize
+  // .sync({force: true})
   .sync()
   .then((result) => {
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({name: "Bob", email: "bob.test@test.com"});
+    }
+    return user;
+  })
+  .then((user) => {
     app.listen(3000);
   })
   .catch((err) => console.error("sequelize.sync err", err));
