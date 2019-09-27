@@ -71,10 +71,7 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   console.log("In admin postDeleteProduct middleware");
   const productId = req.body.productId;
-  Product.findByPk(productId)
-    .then((product) => {
-      return product.destroy();
-    })
+  Product.deleteById(productId)
     .then((result) => {
       console.log(`Removed product with ID: ${productId}`);
       res.redirect("/admin/products");
