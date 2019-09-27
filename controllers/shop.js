@@ -64,10 +64,21 @@ exports.postCart = (req, res, next) => {
   console.log("In postCart middleware");
 
   const productId = req.body.productId;
-  let fetchedCart;
-  let newQuantity = 1;
+  Product.findById(productId)
+    .then((product) => {
+      return req.user.addToCart(product);
+    })
+    .then((result) => {
+      console.log("postCart result success");
+      res.redirect("/cart");
+    })
+    .catch((err) => console.error("postCart err", err));
 
-  res.user
+  //
+  // let fetchedCart;
+  // let newQuantity = 1;
+
+  /* res.user
     .getCart()
     .then((cart) => {
       fetchedCart = cart;
@@ -92,7 +103,7 @@ exports.postCart = (req, res, next) => {
     .then(() => {
       res.redirect("/cart");
     })
-    .catch((err) => console.error("getCart err", err));
+    .catch((err) => console.error("getCart err", err)); */
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
