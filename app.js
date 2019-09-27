@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
 const mongoConnect = require("./util/database").mongoConnect;
 
+const User = require("./models/user");
+
 const app = express();
 
 /**
@@ -27,6 +29,18 @@ app.use(bodyParser.urlencoded());
 
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  User.findById("5d8e08ea0741b0298c250b9b")
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((error) => {
+      console.error("add user data error", error);
+    });
+  next();
+});
 
 // imported routes
 app.use("/admin", adminRoutes);
