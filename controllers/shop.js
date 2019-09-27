@@ -18,12 +18,10 @@ exports.getProduct = (req, res, next) => {
   console.log("In getProduct middleware");
 
   const productId = req.params.productId;
-  Product
-    // .findByPk(productId)
-    .findAll({where: {id: productId}})
-    .then((products) => {
+  Product.findById(productId)
+    .then((product) => {
       res.render("shop/product-detail", {
-        product: products[0],
+        product: product,
         pageTitle: `Product Detail of ${productId}`,
         path: "/products",
       });
