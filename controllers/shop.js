@@ -45,11 +45,8 @@ exports.getIndex = (req, res, next) => {
 exports.getCart = (req, res, next) => {
   console.log("In getCart middleware");
 
-  res.user
+  req.user
     .getCart()
-    .then((cart) => {
-      return cart.getProducts();
-    })
     .then((cartProducts) => {
       res.render("shop/cart", {
         pageTitle: "Cart",
@@ -73,37 +70,6 @@ exports.postCart = (req, res, next) => {
       res.redirect("/cart");
     })
     .catch((err) => console.error("postCart err", err));
-
-  //
-  // let fetchedCart;
-  // let newQuantity = 1;
-
-  /* res.user
-    .getCart()
-    .then((cart) => {
-      fetchedCart = cart;
-      return cart.getProducts({where: {id: productId}});
-    })
-    .then((cartProducts) => {
-      let product;
-      if (cartProducts.length > 0) {
-        product = cartProducts[0];
-      }
-
-      if (product) {
-        const oldQuantity = product.cartItem.quantity;
-        newQuantity = oldQuantity + 1;
-        return product;
-      }
-      return Product.findByPk(productId);
-    })
-    .then((product) => {
-      return fetchedCart.addProduct(product, {through: {quantity: newQuantity}});
-    })
-    .then(() => {
-      res.redirect("/cart");
-    })
-    .catch((err) => console.error("getCart err", err)); */
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {

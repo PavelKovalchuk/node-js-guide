@@ -56,6 +56,28 @@ class User {
       });
   }
 
+  getCart() {
+    const db = getDb();
+    const productsIds = this.cart.items.map((item) => item.productId);
+
+    return db
+      .collection("products")
+      .find({_id: {$in: productsIds}})
+      .toArray()
+      .then((products) => {
+        console.log("--- getCart user success");
+        return products.map((product) => {
+          return {
+            ...product,
+            quantity: this.cart.items.find((item) => item.productId.toString() === product._id.toString()).quantity,
+          };
+        });
+      })
+      .catch((error) => {
+        console.error("getCart user error", error);
+      });
+  }
+
   static findById(userId) {
     const db = getDb();
     return db
