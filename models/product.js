@@ -7,7 +7,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = id;
+    this._id = new mongodb.ObjectId(id);
   }
 
   save() {
@@ -16,7 +16,7 @@ class Product {
 
     if (this._id) {
       // Update existing one
-      dbOperation = db.collection("products").updateOne({_id: new mongodb.ObjectId(this._id)}, {$set: this});
+      dbOperation = db.collection("products").updateOne({_id: this._id}, {$set: this});
     } else {
       // If collection does not exist MongoDB will create it
       dbOperation = db.collection("products").insertOne(this);
