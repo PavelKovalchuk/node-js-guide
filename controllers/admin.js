@@ -1,4 +1,7 @@
+const mongodb = require("mongodb");
 const Product = require("../models/product");
+
+const ObjectId = mongodb.ObjectId;
 
 exports.getAddProduct = (req, res, next) => {
   console.log("In add-product middleware");
@@ -15,28 +18,15 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const product = new Product(title, price, description, imageUrl)
+  new Product(title, price, description, imageUrl)
     .save()
     .then((result) => {
-      console.log("--- Product has been created!", result);
+      // console.log("--- Product has been created!", result);
       res.redirect("/");
     })
     .catch((err) => console.error("postAddProduct err", err));
-
-  /* res.user
-    .createProduct({
-      title: title,
-      price: price,
-      imageUrl: imageUrl,
-      description: description,
-    })   
-    .then((result) => {
-      console.log("Product has been created!");
-      res.redirect("/");
-    })
-    .catch((err) => console.error("postAddProduct err", err)); */
 };
-/*
+
 exports.getEditProduct = (req, res, next) => {
   console.log("In getEditProduct middleware");
 
@@ -46,11 +36,8 @@ exports.getEditProduct = (req, res, next) => {
   }
 
   const productId = req.params.productId;
-  res.user
-    .getProducts({where: {id: productId}})
-    // Product.findByPk(productId)
-    .then((products) => {
-      const product = products[0];
+  Product.findById(productId)
+    .then((product) => {
       if (!product) {
         return res.redirect("/");
       }
@@ -73,15 +60,10 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
 
-  Product.findByPk(productId)
-    .then((product) => {
-      product.title = updatedTitle;
-      product.price = updatedPrice;
-      product.imageUrl = updatedImageUrl;
-      product.description = updatedDescription;
+  const product = new Product(updatedTitle, updatedPrice, updatedDescription, updatedImageUrl, new ObjectId(productId));
 
-      return product.save();
-    })
+  product
+    .save()
     .then((result) => {
       console.log(`Updated product with ID: ${productId}`);
       res.redirect("/admin/products");
@@ -106,9 +88,7 @@ exports.postDeleteProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   console.log("In admin getProducts middleware");
 
-  res.user
-    .getProducts()
-    // Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -118,4 +98,3 @@ exports.getProducts = (req, res, next) => {
     })
     .catch((err) => console.error("admin getProducts err", err));
 };
- */
