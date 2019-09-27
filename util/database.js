@@ -1,23 +1,27 @@
-/** Connecting WITH Sequelize */
+const mongodb = require("mongodb");
 
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize("node_guide", "root", "12081988", {dialect: "mysql", host: "localhost"});
-module.exports = sequelize;
+const MongoClient = mongodb.MongoClient;
+let _db;
 
-/** Connecting without Sequelize */
+const mongoConnect = (callback) => {
+  MongoClient.connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shop?retryWrites=true&w=majority")
+    .then((client) => {
+      console.log("Connected mongodb");
+      _db = client.db();
+      callback(client);
+    })
+    .catch((error) => {
+      console.error("Error in connecting mongodb: ", error);
+      throw error;
+    });
+};
 
-// const mysql = require("mysql2");
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+  throw "No database found";
+};
 
-/**
- * Rather than creating and managing connections one-by-one, this module also provides built-in connection pooling.
- * This is a shortcut for the pool.getConnection() -> connection.query() -> connection.release() code flow.
- * Using pool.getConnection() is useful to share connection state for subsequent queries. This is because two calls to pool.query() may use two different connections and run in parallel.
- */
-//  const pool = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   database: "node_guide",
-//   password: "12081988",
-// });
-
-// module.exports = pool.promise();
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;

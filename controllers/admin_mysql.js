@@ -15,28 +15,27 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const product = new Product(title, price, description, imageUrl)
-    .save()
-    .then((result) => {
-      console.log("--- Product has been created!", result);
-      res.redirect("/");
-    })
-    .catch((err) => console.error("postAddProduct err", err));
-
-  /* res.user
+  res.user
     .createProduct({
       title: title,
       price: price,
       imageUrl: imageUrl,
       description: description,
-    })   
+    })
+    // Product.create({
+    //   title: title,
+    //   price: price,
+    //   imageUrl: imageUrl,
+    //   description: description,
+    //   userId: res.user.dataValues.id,
+    // })
     .then((result) => {
       console.log("Product has been created!");
       res.redirect("/");
     })
-    .catch((err) => console.error("postAddProduct err", err)); */
+    .catch((err) => console.error("postAddProduct err", err));
 };
-/*
+
 exports.getEditProduct = (req, res, next) => {
   console.log("In getEditProduct middleware");
 
@@ -118,4 +117,3 @@ exports.getProducts = (req, res, next) => {
     })
     .catch((err) => console.error("admin getProducts err", err));
 };
- */
