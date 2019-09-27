@@ -98,8 +98,8 @@ exports.postOrders = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   console.log("In getOrders middleware");
 
-  res.user
-    .getOrders({include: ["products"]})
+  req.user
+    .getOrders()
     .then((orders) => {
       res.render("shop/orders", {
         pageTitle: "Orders",
