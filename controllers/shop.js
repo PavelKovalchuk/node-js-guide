@@ -120,9 +120,12 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.postOrders = (req, res, next) => {
   console.log("In postOrders middleware");
 
+  let fetchedCart;
+
   res.user
     .getCart()
     .then((cart) => {
+      fetchedCart = cart;
       return cart.getProducts();
     })
     .then((products) => {
@@ -139,6 +142,9 @@ exports.postOrders = (req, res, next) => {
         .catch((err) => console.error("postOrders err", err));
     })
     .then((result) => {
+      return fetchedCart.setProducts(null);
+    })
+    .then((result) => {
       res.redirect("/orders");
     })
     .catch((err) => console.error("postOrders err", err));
@@ -146,18 +152,15 @@ exports.postOrders = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
   console.log("In getOrders middleware");
-  res.render("shop/orders", {
-    prods: [],
-    pageTitle: "Orders",
-    path: "/orders",
-  });
-};
 
-exports.getCheckout = (req, res, next) => {
-  console.log("In getCheckout middleware");
-  res.render("shop/checkout", {
-    prods: [],
-    pageTitle: "Checkout",
-    path: "/checkout",
-  });
+  res.user
+    .getOrders({include: ["products"]})
+    .then((orders) => {
+      res.render("shop/orders", {
+        pageTitle: "Orders",
+        path: "/orders",
+        orders: orders,
+      });
+    })
+    .catch((err) => console.error("getOrders err", err));
 };
