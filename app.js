@@ -39,7 +39,6 @@ app.use((req, res, next) => {
     .catch((error) => {
       console.error("add user data error", error);
     });
-  next();
 });
 
 // imported routes
