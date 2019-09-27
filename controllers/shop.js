@@ -74,18 +74,10 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteProduct = (req, res, next) => {
   console.log("In postCartDeleteProduct middleware");
-
   const productId = req.body.productId;
 
-  res.user
-    .getCart()
-    .then((cart) => {
-      return cart.getProducts({where: {id: productId}});
-    })
-    .then((products) => {
-      const product = products[0];
-      product.cartItem.destroy();
-    })
+  req.user
+    .deleteItemFromCart(productId)
     .then((result) => {
       res.redirect("/cart");
     })

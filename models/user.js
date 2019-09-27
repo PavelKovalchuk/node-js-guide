@@ -78,6 +78,22 @@ class User {
       });
   }
 
+  deleteItemFromCart(productId) {
+    const db = getDb();
+    const updatedCartItems = this.cart.items.filter((item) => productId.toString() !== item.productId.toString());
+
+    return db
+      .collection("users")
+      .updateOne({_id: new ObjectId(this._id)}, {$set: {cart: {items: updatedCartItems}}})
+      .then((result) => {
+        console.log("--- deleteItemFromCart user success");
+        return result;
+      })
+      .catch((error) => {
+        console.error("deleteItemFromCart user error", error);
+      });
+  }
+
   static findById(userId) {
     const db = getDb();
     return db
