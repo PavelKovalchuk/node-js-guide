@@ -87,30 +87,8 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.postOrders = (req, res, next) => {
   console.log("In postOrders middleware");
 
-  let fetchedCart;
-
-  res.user
-    .getCart()
-    .then((cart) => {
-      fetchedCart = cart;
-      return cart.getProducts();
-    })
-    .then((products) => {
-      return res.user
-        .createOrder()
-        .then((order) => {
-          return order.addProducts(
-            products.map((product) => {
-              product.orderItem = {quantity: product.cartItem.quantity};
-              return product;
-            })
-          );
-        })
-        .catch((err) => console.error("postOrders err", err));
-    })
-    .then((result) => {
-      return fetchedCart.setProducts(null);
-    })
+  req.user
+    .addOrder()
     .then((result) => {
       res.redirect("/orders");
     })
