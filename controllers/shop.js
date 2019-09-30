@@ -48,12 +48,15 @@ exports.getCart = (req, res, next) => {
   console.log("In getCart middleware");
 
   req.user
-    .getCart()
-    .then((cartProducts) => {
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then((user) => {
+      const products = user.cart.items;
+
       res.render("shop/cart", {
         pageTitle: "Cart",
         path: "/cart",
-        products: cartProducts,
+        products: products,
       });
     })
     .catch((err) => console.error("getCart err", err));
