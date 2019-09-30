@@ -121,8 +121,7 @@ exports.postOrders = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   console.log("In getOrders middleware");
 
-  req.user
-    .getOrders()
+  Order.find({"user.userId": req.user._id})
     .then((orders) => {
       res.render("shop/orders", {
         pageTitle: "Orders",
