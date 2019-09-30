@@ -2,8 +2,9 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database").mongoConnect;
-
+// for connecting DB for raw MongoDb
+// const mongoConnect = require("./util/database").mongoConnect;
+const mongoose = require("mongoose");
 const User = require("./models/user");
 
 const app = express();
@@ -48,7 +49,17 @@ app.use(shopRoutes);
 //404
 app.use(errorController.get404);
 
-mongoConnect(() => {
+// for connecting DB for raw MongoDb
+/* mongoConnect(() => {
   console.log("--- mongoConnect runs!");
   app.listen(3000);
-});
+}); */
+
+mongoose
+  .connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shop?retryWrites=true&w=majority")
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch((error) => {
+    console.error("Error in connecting mongoose: ", error);
+  });
