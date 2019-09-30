@@ -3,7 +3,7 @@ const Product = require("../models/product");
 exports.getProducts = (req, res, next) => {
   console.log("In getProducts middleware");
 
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
