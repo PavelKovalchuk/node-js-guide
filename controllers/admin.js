@@ -21,10 +21,12 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
+    // Or we can use req.user
+    userId: req.user,
   })
     .save()
     .then((result) => {
-      console.log("--- Product has been created!");
+      console.log("--- Product has been created!", result);
       res.redirect("/");
     })
     .catch((err) => console.error("postAddProduct err", err));

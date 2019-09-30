@@ -4,6 +4,8 @@ exports.getProducts = (req, res, next) => {
   console.log("In getProducts middleware");
 
   Product.find()
+    // add full data of the object, not just userId
+    .populate("userId", "name")
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
