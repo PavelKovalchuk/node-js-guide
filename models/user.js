@@ -49,6 +49,12 @@ userSchema.methods.addToCart = function(product) {
   return this.save();
 };
 
+userSchema.methods.removeFromCart = function(productId) {
+  const updatedCartItems = this.cart.items.filter((item) => productId.toString() !== item.productId.toString());
+  this.cart.items = updatedCartItems;
+  return this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);
 
 /* const mongodb = require("mongodb");
@@ -79,35 +85,6 @@ class User {
       });
   }
 
-  addToCart(product) {
-    console.log("this.cart", this.cart);
-    const cartProductIndex = this.cart.items.findIndex((item) => {
-      return item.productId.toString() === product._id.toString();
-    });
-
-    let newQuantity = 1;
-    const updatedCartItems = [...this.cart.items];
-
-    if (cartProductIndex >= 0) {
-      newQuantity = this.cart.items[cartProductIndex].quantity + 1;
-      updatedCartItems[cartProductIndex].quantity = newQuantity;
-    } else {
-      updatedCartItems.push({productId: new ObjectId(product._id), quantity: newQuantity});
-    }
-
-    const updatedCart = {items: updatedCartItems};
-    const db = getDb();
-    return db
-      .collection("users")
-      .updateOne({_id: new ObjectId(this._id)}, {$set: {cart: updatedCart}})
-      .then((result) => {
-        console.log("--- addToCart user success");
-        return result;
-      })
-      .catch((error) => {
-        console.error("addToCart user error", error);
-      });
-  }
 
   getCart() {
     const db = getDb();
@@ -188,19 +165,6 @@ class User {
       });
   }
 
-  static findById(userId) {
-    const db = getDb();
-    return db
-      .collection("users")
-      .findOne({_id: new ObjectId(userId)})
-      .then((user) => {
-        console.log("--- findById user success");
-        return user;
-      })
-      .catch((error) => {
-        console.error("findById user error", error);
-      });
-  }
 }
 
 module.exports = User;
