@@ -31,7 +31,8 @@ app.use(bodyParser.urlencoded());
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use((req, res, next) => {
+// for connecting DB for raw MongoDb
+/* app.use((req, res, next) => {
   User.findById("5d8e08ea0741b0298c250b9b")
     .then((user) => {
       req.user = new User(user.name, user.email, user.cart, user._id);
@@ -40,7 +41,7 @@ app.use((req, res, next) => {
     .catch((error) => {
       console.error("add user data error", error);
     });
-});
+}); */
 
 // imported routes
 app.use("/admin", adminRoutes);
@@ -56,7 +57,7 @@ app.use(errorController.get404);
 }); */
 
 mongoose
-  .connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shop?retryWrites=true&w=majority")
+  .connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority")
   .then(() => {
     app.listen(3000);
   })
