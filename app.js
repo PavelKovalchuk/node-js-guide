@@ -7,8 +7,16 @@ const errorController = require("./controllers/error");
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+
+const MONGO_DB_URI =
+  "mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority";
 
 const app = express();
+const store = new MongoDBStore({
+  uri: MONGO_DB_URI,
+  collection: "sessions",
+});
 
 /**
  * Assigns setting name to value. Sharing data.
@@ -39,6 +47,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {maxAge: 60000},
+    store: store,
   })
 );
 
@@ -68,7 +77,7 @@ app.use(errorController.get404);
 }); */
 
 mongoose
-  .connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority", {
+  .connect(MONGO_DB_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
