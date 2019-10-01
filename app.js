@@ -6,6 +6,7 @@ const errorController = require("./controllers/error");
 // const mongoConnect = require("./util/database").mongoConnect;
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const session = require("express-session");
 
 const app = express();
 
@@ -31,6 +32,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
+// Session middleware
+app.use(
+  session({
+    secret: "me long string value",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {maxAge: 60000},
+  })
+);
 
 app.use((req, res, next) => {
   User.findById("5d91cadd26936718ac407260")
