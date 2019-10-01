@@ -16,7 +16,34 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  const email = req.body.email;
+  const name = req.body.name;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  User.findOne({email: email})
+    .then((user) => {
+      if (user) {
+        return res.redirect("/signup");
+      }
+
+      const newUser = new User({
+        email: email,
+        password: password,
+        name: name,
+        cart: {
+          items: [],
+        },
+      });
+
+      return newUser.save();
+    })
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log("postSignup email err", err));
+};
 
 exports.postLogin = (req, res, next) => {
   User.findById("5d91cadd26936718ac407260")
