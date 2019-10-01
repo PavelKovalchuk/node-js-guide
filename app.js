@@ -27,7 +27,7 @@ const authRoutes = require("./routes/auth");
 
 // 3-party package for encoding data in the body
 // Middleware pattern
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
@@ -58,7 +58,11 @@ app.use(errorController.get404);
 }); */
 
 mongoose
-  .connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority")
+  .connect("mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority", {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  })
   .then(() => {
     User.findOne().then((user) => {
       if (!user) {
