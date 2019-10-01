@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
 
 const MONGO_DB_URI =
   "mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority";
@@ -17,6 +18,7 @@ const store = new MongoDBStore({
   uri: MONGO_DB_URI,
   collection: "sessions",
 });
+const csrfProtection = csrf();
 
 /**
  * Assigns setting name to value. Sharing data.
@@ -51,6 +53,8 @@ app.use(
   })
 );
 
+app.use(csrfProtection);
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -61,6 +65,13 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => console.log("add user data error", err));
+});
+
+app.use((req, res, next) => {
+  // res.locals - here we can add local variables for the views
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 // imported routes
