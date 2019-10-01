@@ -17,9 +17,17 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.getSignup = (req, res, next) => {
+  let messages = req.flash("error");
+  if (messages.length > 0) {
+    messages = messages[0];
+  } else {
+    messages = null;
+  }
+
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Signup",
+    errorMessage: messages,
   });
 };
 
@@ -32,7 +40,7 @@ exports.postSignup = (req, res, next) => {
   User.findOne({email: email})
     .then((user) => {
       if (user) {
-        console.log("User with such email already exists");
+        req.flash("error", "User with such email already exists.");
         return res.redirect("/signup");
       }
 
@@ -80,6 +88,7 @@ exports.postLogin = (req, res, next) => {
               res.redirect("/");
             });
           }
+          req.flash("error", "Invalid password!");
           res.redirect("/login");
         })
         .catch((err) => console.log("postLogin password compare err", err));
