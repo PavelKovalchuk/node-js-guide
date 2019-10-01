@@ -12,7 +12,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: "All products",
         path: "/products",
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.error("getProducts err", err));
@@ -28,7 +28,7 @@ exports.getProduct = (req, res, next) => {
         product: product,
         pageTitle: `Product Detail of ${productId}`,
         path: "/products",
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.error("getProduct err", err));
@@ -42,7 +42,7 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         pageTitle: "Shop",
         path: "/",
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.error("getIndex err", err));
@@ -61,7 +61,7 @@ exports.getCart = (req, res, next) => {
         pageTitle: "Cart",
         path: "/cart",
         products: products,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.error("getCart err", err));
@@ -125,13 +125,13 @@ exports.postOrders = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   console.log("In getOrders middleware");
 
-  Order.find({"user.userId": req.user._id})
+  Order.find({"user.userId": req.session._id})
     .then((orders) => {
       res.render("shop/orders", {
         pageTitle: "Orders",
         path: "/orders",
         orders: orders,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.error("getOrders err", err));

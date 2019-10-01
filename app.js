@@ -46,20 +46,21 @@ app.use(
     secret: "me long string value",
     resave: false,
     saveUninitialized: false,
-    cookie: {maxAge: 60000},
+    cookie: {maxAge: 600000},
     store: store,
   })
 );
 
 app.use((req, res, next) => {
-  User.findById("5d91cadd26936718ac407260")
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
       next();
     })
-    .catch((error) => {
-      console.error("add user data error", error);
-    });
+    .catch((err) => console.log("add user data error", err));
 });
 
 // imported routes
