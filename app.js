@@ -23,6 +23,7 @@ app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const authRoutes = require("./routes/auth");
 
 // 3-party package for encoding data in the body
 // Middleware pattern
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 // imported routes
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 //404
 app.use(errorController.get404);
