@@ -125,7 +125,10 @@ exports.postEditProduct = (req, res, next) => {
         res.redirect("/admin/products");
       });
     })
-    .catch((err) => console.error("admin postEditProduct err", err));
+    .catch((err) => {
+      console.error("admin postEditProduct err", err);
+      res.redirect("/500");
+    });
 };
 
 exports.postDeleteProduct = (req, res, next) => {
