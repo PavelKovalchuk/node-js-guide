@@ -50,7 +50,7 @@ app.use(
     secret: "me long string value",
     resave: false,
     saveUninitialized: false,
-    cookie: {maxAge: 600000},
+    cookie: {maxAge: 6000000},
     store: store,
   })
 );
