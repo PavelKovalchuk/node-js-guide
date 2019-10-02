@@ -61,6 +61,7 @@ form {
 }
 
 .main-header__item a,
+.main-header__item span,
 .main-header__item button {
   font: inherit;
   background: transparent;
@@ -68,6 +69,17 @@ form {
   text-decoration: none;
   color: white;
   cursor: pointer;
+}
+
+.main-header__item span.userData {
+  cursor: none;
+  color: whitesmoke;
+}
+
+.main-header__item span.userData::after {
+  content: " | ";
+  display: inline;
+  color: whitesmoke;
 }
 
 .main-header__item a:hover,

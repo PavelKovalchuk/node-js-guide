@@ -73,6 +73,7 @@ app.use((req, res, next) => {
   // res.locals - here we can add local variables for the views
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
+  res.locals.userEmail = req.session.user && req.session.user.email ? req.session.user.email : null;
   next();
 });
 
