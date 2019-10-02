@@ -87,11 +87,16 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+// 500
+app.get("/500", errorController.get500);
+
 //404
 app.use(errorController.get404);
 
-// 500
-app.get("/500", errorController.get500);
+// Error handler middleware
+app.use((error, req, res, next) => {
+  res.redirect("/500");
+});
 
 // for connecting DB for raw MongoDb
 /* mongoConnect(() => {

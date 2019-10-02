@@ -51,7 +51,11 @@ exports.postAddProduct = (req, res, next) => {
       console.log("--- Product has been created!", result);
       res.redirect("/");
     })
-    .catch((err) => console.error("postAddProduct err", err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -78,7 +82,11 @@ exports.getEditProduct = (req, res, next) => {
         validationErrors: [],
       });
     })
-    .catch((err) => console.error("admin getEditProduct err", err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -116,6 +124,9 @@ exports.postEditProduct = (req, res, next) => {
         return res.redirect("/");
       }
 
+      // For test purpose
+      // throw new Error("Dummy error");
+
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.imageUrl = updatedImageUrl;
@@ -126,8 +137,9 @@ exports.postEditProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.error("admin postEditProduct err", err);
-      res.redirect("/500");
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -139,7 +151,11 @@ exports.postDeleteProduct = (req, res, next) => {
       console.log(`Removed product with ID: ${productId}`);
       res.redirect("/admin/products");
     })
-    .catch((err) => console.error("admin postDeleteProduct err", err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
@@ -153,5 +169,9 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
       });
     })
-    .catch((err) => console.error("admin getProducts err", err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
