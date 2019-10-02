@@ -67,15 +67,18 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(productId)
     .then((product) => {
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/");
+      }
+
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.imageUrl = updatedImageUrl;
       product.description = updatedDescription;
-      return product.save();
-    })
-    .then((result) => {
-      console.log(`Updated product with ID: ${productId}`);
-      res.redirect("/admin/products");
+      return product.save().then((result) => {
+        console.log(`Updated product with ID: ${productId}`);
+        res.redirect("/admin/products");
+      });
     })
     .catch((err) => console.error("admin postEditProduct err", err));
 };
@@ -83,7 +86,7 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   console.log("In admin postDeleteProduct middleware");
   const productId = req.body.productId;
-  Product.findOneAndRemove(productId)
+  Product.deleteOne({_id: productId, userId: req.user._id})
     .then((result) => {
       console.log(`Removed product with ID: ${productId}`);
       res.redirect("/admin/products");
