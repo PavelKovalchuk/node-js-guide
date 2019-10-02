@@ -40,6 +40,11 @@ exports.getSignup = (req, res, next) => {
     path: "/signup",
     pageTitle: "Signup",
     errorMessage: messages,
+    oldInput: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 };
 
@@ -47,7 +52,6 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -56,6 +60,12 @@ exports.postSignup = (req, res, next) => {
       path: "/signup",
       pageTitle: "Signup",
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        name: name,
+        password: password,
+        confirmPassword: req.body.confirmPassword,
+      },
     });
   }
   bcrypt
@@ -82,7 +92,7 @@ exports.postSignup = (req, res, next) => {
     })
     .then((result) => {
       console.log("send email result", result);
-      res.redirect("/");
+      res.redirect("/login");
     })
     .catch((err) => console.log("postSignup email err", err));
 };
@@ -90,6 +100,15 @@ exports.postSignup = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/login", {
+      path: "/login",
+      pageTitle: "Login",
+      errorMessage: errors.array()[0].msg,
+    });
+  }
 
   User.findOne({email: email})
     .then((user) => {
