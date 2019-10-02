@@ -10,6 +10,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const multer = require("multer");
 
 const MONGO_DB_URI =
   "mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority";
@@ -20,7 +21,25 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 const csrfProtection = csrf();
-app.use(flash());
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    const date = new Date().getUTCMilliseconds();
+    console.log("date", date);
+    cb(null, date + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 /**
  * Assigns setting name to value. Sharing data.
@@ -42,6 +61,9 @@ const authRoutes = require("./routes/auth");
 // Middleware pattern
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Middleware for handling binary files
+app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single("image"));
+
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
 // Session middleware
@@ -56,6 +78,7 @@ app.use(
 );
 
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
   // res.locals - here we can add local variables for the views
@@ -97,7 +120,11 @@ app.use(errorController.get404);
 // Error handler middleware
 app.use((error, req, res, next) => {
   // res.redirect("/500");
-  res.status(404).render("500", {pageTitle: "Error", path: "/500", isAuthenticated: req.session.isLoggedIn});
+  res.status(500).render("500", {
+    pageTitle: "Error!",
+    path: "/500",
+    isAuthenticated: req.session.isLoggedIn,
+  });
 });
 
 // for connecting DB for raw MongoDb

@@ -15,10 +15,12 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
+  const imageUrl = req.file;
   const price = req.body.price;
   const description = req.body.description;
   const errors = validationResult(req);
+
+  console.log("imageUrl", imageUrl);
 
   if (!errors.isEmpty()) {
     console.log(errors.array());
@@ -42,7 +44,7 @@ exports.postAddProduct = (req, res, next) => {
     title: title,
     price: price,
     description: description,
-    imageUrl: imageUrl,
+    imageUrl: "imageUrl",
     // Or we can use req.user
     userId: req.user,
   })
