@@ -3,7 +3,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
-const {validationResult} = require("express-validator/check");
+const {validationResult} = require("express-validator");
 
 const transporter = nodemailer.createTransport(
   sendgridTransport({
@@ -51,8 +51,6 @@ exports.postSignup = (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log("errors ", errors);
-    console.log("errors.array ", errors.array());
     // render the same page again
     return res.status(422).render("auth/signup", {
       path: "/signup",
