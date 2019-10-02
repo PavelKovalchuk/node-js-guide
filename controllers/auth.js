@@ -58,41 +58,31 @@ exports.postSignup = (req, res, next) => {
       errorMessage: errors.array()[0].msg,
     });
   }
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const newUser = new User({
+        email: email,
+        password: hashedPassword,
+        name: name,
+        cart: {
+          items: [],
+        },
+      });
 
-  User.findOne({email: email})
-    .then((user) => {
-      if (user) {
-        req.flash("error", "User with such email already exists.");
-        return res.redirect("/signup");
-      }
-
-      return bcrypt
-        .hash(password, 12)
-        .then((hashedPassword) => {
-          const newUser = new User({
-            email: email,
-            password: hashedPassword,
-            name: name,
-            cart: {
-              items: [],
-            },
-          });
-
-          return newUser.save();
-        })
-        .then((result) => {
-          return transporter.sendMail({
-            to: email,
-            from: "node-guide-kovalchuk@test.com",
-            subject: "Signup succeeded!",
-            html: `<h1>${name}, you have successfully signed up!</h1>`,
-          });
-        })
-        .then((result) => {
-          console.log("send email result", result);
-          res.redirect("/");
-        })
-        .catch((err) => console.log("postSignup send email err", err));
+      return newUser.save();
+    })
+    .then((result) => {
+      return transporter.sendMail({
+        to: email,
+        from: "node-guide-kovalchuk@test.com",
+        subject: "Signup succeeded!",
+        html: `<h1>${name}, you have successfully signed up!</h1>`,
+      });
+    })
+    .then((result) => {
+      console.log("send email result", result);
+      res.redirect("/");
     })
     .catch((err) => console.log("postSignup email err", err));
 };
