@@ -24,12 +24,10 @@ const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    cb(null, "images/");
   },
   filename: (req, file, cb) => {
-    const date = new Date().getUTCMilliseconds();
-    console.log("date", date);
-    cb(null, date + "-" + file.originalname);
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
