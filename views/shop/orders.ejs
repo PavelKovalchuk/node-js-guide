@@ -9,20 +9,16 @@
     <h1>Nothing there</h1>
     <% } else { %>
     <% orders.forEach(order => { %>
-    <ul class="orders">
-      <% orders.forEach(order => { %>
+    <ul class="orders">     
       <li class="orders__item">
         <h1>Order - # <%= order._id %></h1>
         <ul class="orders__products">
           <% order.products.forEach(item => { %>
-          <li class="orders__products-item">
-            <%= item.product.title %> (<%= item.quantity %>)
-             - <a href="/orders/<%= order._id %>">Invoice</a>
-            </li>
+          <li class="orders__products-item"><%= item.product.title %> (<%= item.quantity %>)</li>
           <% }); %>
+          <li class="orders__products-invoice"><a href="/orders/<%= order._id %>">Invoice</a></li>
         </ul>
-      </li>
-      <% }); %>
+      </li>     
     </ul>
     <% }) %>
     <% } %>

@@ -232,14 +232,21 @@ exports.getInvoice = (req, res, next) => {
 
       pdfDoc.fontSize(26).text("Invoice", {
         underline: true,
+        align: "center",
       });
-      pdfDoc.text("-----------------------");
+      pdfDoc.text("-----------------------", {
+        align: "center",
+      });
+
       let totalPrice = 0;
       order.products.forEach((prod) => {
         totalPrice += prod.quantity * prod.product.price;
         pdfDoc.fontSize(14).text(prod.product.title + " - " + prod.quantity + " x " + "$" + prod.product.price);
       });
-      pdfDoc.text("---");
+      pdfDoc.text("---", {
+        align: "center",
+      });
+      pdfDoc.fontSize(20).text("Person: " + order.user.name + ".");
       pdfDoc.fontSize(20).text("Total Price: $" + totalPrice);
 
       pdfDoc.end();

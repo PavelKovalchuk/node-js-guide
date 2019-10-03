@@ -27,3 +27,18 @@
   border: 1px solid #00695c;
   color: #00695c;
 }
+
+.orders__products-invoice {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: none;
+  color: #da24ac;
+}
+
+.orders__products-invoice a {
+  color: inherit;
+}
+
+.orders__products-invoice a:visited {
+  color: inherit;
+}
