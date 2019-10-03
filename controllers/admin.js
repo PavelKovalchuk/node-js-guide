@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const {validationResult} = require("express-validator");
+const fileHelper = require("./../util/file");
 
 exports.getAddProduct = (req, res, next) => {
   console.log("In add-product middleware");
@@ -148,6 +149,7 @@ exports.postEditProduct = (req, res, next) => {
       product.description = updatedDescription;
 
       if (updatedImage) {
+        fileHelper.deleteFile(product.imageUrl);
         product.imageUrl = updatedImage.path;
       }
 
@@ -166,7 +168,14 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   console.log("In admin postDeleteProduct middleware");
   const productId = req.body.productId;
-  Product.deleteOne({_id: productId, userId: req.user._id})
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        return next(new Error("Product not found."));
+      }
+      fileHelper.deleteFile(product.imageUrl);
+      return Product.deleteOne({_id: productId, userId: req.user._id});
+    })
     .then((result) => {
       console.log(`Removed product with ID: ${productId}`);
       res.redirect("/admin/products");
