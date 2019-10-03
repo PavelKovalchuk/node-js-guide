@@ -71,6 +71,8 @@ app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single("image"));
 
 // static data (assets) - manages getting files (with .css, .js etc)
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 // Session middleware
 app.use(
   session({
