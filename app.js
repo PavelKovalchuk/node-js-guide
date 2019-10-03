@@ -5,6 +5,8 @@ const errorController = require("./controllers/error");
 // for connecting DB for raw MongoDb
 // const mongoConnect = require("./util/database").mongoConnect;
 const mongoose = require("mongoose");
+const shopController = require("./controllers/shop");
+const isAuth = require("./middleware/is-auth");
 const User = require("./models/user");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -82,13 +84,11 @@ app.use(
   })
 );
 
-app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
   // res.locals - here we can add local variables for the views
   res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
   res.locals.userEmail = req.session.user && req.session.user.email ? req.session.user.email : null;
   next();
 });
@@ -112,6 +112,15 @@ app.use((req, res, next) => {
 });
 
 // imported routes
+
+app.post("/create-order", isAuth, shopController.postOrders);
+app.use(csrfProtection);
+app.use((req, res, next) => {
+  // res.locals - here we can add local variables for the views
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
