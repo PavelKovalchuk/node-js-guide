@@ -12,6 +12,7 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
 const helmet = require("helmet");
+const compression = require("compression");
 
 const MONGO_DB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
@@ -63,6 +64,7 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
 app.use(helmet());
+app.use(compression());
 
 // 3-party package for encoding data in the body
 // Middleware pattern
