@@ -15,6 +15,7 @@ const multer = require("multer");
 const helmet = require("helmet");
 const compression = require("compression");
 const morgan = require("morgan");
+const https = require("https");
 
 const MONGO_DB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
@@ -26,6 +27,8 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 const csrfProtection = csrf();
+const privateKey = fs.readFileSync("server.key");
+const certificate = fs.readFileSync("server.cert");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -160,7 +163,8 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => {
-    app.listen(process.env.PORT || 3000);
+    // app.listen(process.env.PORT || 3000);
+    https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 3000);
   })
   .catch((error) => {
     console.error("Error in connecting mongoose: ", error);
