@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
 const mongoose = require("mongoose");
@@ -13,6 +14,7 @@ const flash = require("connect-flash");
 const multer = require("multer");
 const helmet = require("helmet");
 const compression = require("compression");
+const morgan = require("morgan");
 
 const MONGO_DB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
@@ -65,6 +67,9 @@ const authRoutes = require("./routes/auth");
 
 app.use(helmet());
 app.use(compression());
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), {flags: "a"});
+app.use(morgan("combined", {stream: accessLogStream}));
 
 // 3-party package for encoding data in the body
 // Middleware pattern
