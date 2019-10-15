@@ -2,8 +2,6 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
-// for connecting DB for raw MongoDb
-// const mongoConnect = require("./util/database").mongoConnect;
 const mongoose = require("mongoose");
 const shopController = require("./controllers/shop");
 const isAuth = require("./middleware/is-auth");
@@ -13,6 +11,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
+const helmet = require("helmet");
 
 const MONGO_DB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
@@ -62,6 +61,8 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
+
+app.use(helmet());
 
 // 3-party package for encoding data in the body
 // Middleware pattern
