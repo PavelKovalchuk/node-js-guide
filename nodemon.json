@@ -1,0 +1,9 @@
+{
+  "env": {
+    "MONGO_USER": "pavel",
+    "MONGO_PASSWORD": "12081988",
+    "MONGO_DATABASE": "shopMongoose",
+    "PORT": 3000,
+    "STRIPE_KEY": "sk_test_SBwUsewkVoy4XFcCozW6Y1di00iKZQ4DRx"
+  }
+}

@@ -14,8 +14,9 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
 
-const MONGO_DB_URI =
-  "mongodb+srv://pavel:12081988@node-guide-gnpw9.mongodb.net/shopMongoose?retryWrites=true&w=majority";
+const MONGO_DB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
+  process.env.MONGO_PASSWORD
+}@node-guide-gnpw9.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
 const store = new MongoDBStore({
@@ -142,11 +143,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-// for connecting DB for raw MongoDb
-/* mongoConnect(() => {
-  console.log("--- mongoConnect runs!");
-  app.listen(3000);
-}); */
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 mongoose
   .connect(MONGO_DB_URI, {
@@ -155,7 +152,7 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch((error) => {
     console.error("Error in connecting mongoose: ", error);

@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "set NODE_ENV=production&& set MONGO_USER=pavel&&set MONGO_PASSWORD=12081988&&set MONGO_DATABASE=shopMongoose&&set PORT=3000&&set STRIPE_KEY=sk_test_SBwUsewkVoy4XFcCozW6Y1di00iKZQ4DRx&& node app.js",
+    "start:dev": "nodemon app.js",
     "prettify:js": "prettier --write \"routes/**/*.js\"",
     "prettify:ejs": "prettier --write \"views/**/*.ejs\"",
     "prettify:html": "prettier --write \"views/**/*.html\"",
